@@ -1,25 +1,38 @@
-/* eslint-disable @typescript-eslint/require-await */
 import { Injectable, Logger } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { AuditLog } from './entities/audit-log.entity';
 
 export interface AuditLogEntry {
   action: string;
   userId: string;
-  resourceId: string;
+  resourceId?: string;
   meta?: Record<string, unknown>;
 }
 
-/**
- * AuditService — persist audit trail entries.
- * Replace the logger-only implementation with your real persistence layer
- * (e.g. a TypeORM AuditLog entity) when ready.
- */
 @Injectable()
 export class AuditService {
   private readonly logger = new Logger(AuditService.name);
 
-  async log(entry: AuditLogEntry): Promise<void> {
+  constructor(
+    @InjectRepository(AuditLog)
+    private readonly auditLogRepository: Repository<AuditLog>,
+  ) {}
+
+  async log(entry: AuditLogEntry): Promise<AuditLog> {
+    const record = this.auditLogRepository.create({
+      action: entry.action,
+      userId: entry.userId,
+      resourceId: entry.resourceId ?? null,
+      metadata: entry.meta ?? null,
+    });
+
+    const saved = await this.auditLogRepository.save(record);
+
     this.logger.log(
-      `[AUDIT] action=${entry.action} userId=${entry.userId} resourceId=${entry.resourceId} meta=${JSON.stringify(entry.meta ?? {})}`,
+      `[AUDIT] action=${saved.action} userId=${saved.userId} resourceId=${saved.resourceId ?? 'n/a'}`,
     );
+
+    return saved;
   }
 }

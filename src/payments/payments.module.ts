@@ -3,13 +3,18 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Payment } from './entities/payment.entity';
 import { PaymentsService } from './payments.service';
 import { PaymentsController } from './payments.controller';
+import { AuditModule } from '../audit/audit.module';
 import { EventsModule } from '../events/events.module';
 import { StellarModule } from '../stellar/stellar.module';
-import { AuditService } from 'src/audit/audit.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Payment]), EventsModule, StellarModule],
-  providers: [PaymentsService, AuditService],
+  imports: [
+    TypeOrmModule.forFeature([Payment]),
+    EventsModule,
+    StellarModule,
+    AuditModule,
+  ],
+  providers: [PaymentsService],
   controllers: [PaymentsController],
   exports: [PaymentsService],
 })

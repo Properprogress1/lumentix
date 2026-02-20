@@ -10,6 +10,7 @@ import { StellarModule } from './stellar/stellar.module';
 import { SponsorsModule } from './sponsors/sponsors.module';
 import { WalletModule } from './wallet/wallet.module';
 import { PaymentsModule } from './payments/payments.module';
+import { AuditModule } from './audit/audit.module';
 
 @Module({
   imports: [
@@ -39,6 +40,7 @@ import { PaymentsModule } from './payments/payments.module';
     SponsorsModule,
     WalletModule,
     PaymentsModule,
+    AuditModule,
   ],
   controllers: [AppController],
   providers: [AppService],
