@@ -49,6 +49,21 @@ export class Event {
   })
   status: EventStatus;
 
+  /**
+   * Stellar public key of this event's dedicated escrow account.
+   * Populated when the event is published.
+   */
+  @Column({ nullable: true, type: 'varchar' })
+  escrowPublicKey: string | null;
+
+  /**
+   * AES-256-GCM encrypted escrow secret key.
+   * Format: "<iv_hex>:<authTag_hex>:<ciphertext_hex>"
+   * NEVER expose this field in API responses.
+   */
+  @Column({ nullable: true, type: 'text', select: false })
+  escrowSecretEncrypted: string | null;
+
   @CreateDateColumn()
   createdAt: Date;
 
