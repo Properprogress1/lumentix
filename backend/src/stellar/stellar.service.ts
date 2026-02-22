@@ -39,6 +39,13 @@ export class StellarService implements OnModuleDestroy {
     this.logger.log(`StellarService initialised → ${horizonUrl}`);
   }
 
+  /**
+   * Check connectivity to the Stellar Horizon server (for health checks).
+   */
+  async checkConnectivity(): Promise<void> {
+    await this.server.ledgers().limit(1).call();
+  }
+
   // ─── Existing methods ────────────────────────────────────────────────────
 
   async getAccount(publicKey: string): Promise<Horizon.AccountResponse> {
