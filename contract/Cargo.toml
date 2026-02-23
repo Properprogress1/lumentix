@@ -1,18 +1,38 @@
-[workspace]
-members = [
-    "hello_world",
-]
-resolver = "2"
+[package]
+name = "lumentix_admin"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+serde = { version = "1.0", features = ["derive"] }
+name = "lumentix-ticket-contract"
+name = "lumentix-contract"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+soroban-sdk = { version = "21.5.0", features = ["alloc"] }
+soroban-ledger-snapshot = "21.5.0"
+
+[dev-dependencies]
+soroban-sdk = { version = "21.5.0", features = ["alloc", "testutils"] }
 
 [profile.release]
 opt-level = "z"
 overflow-checks = true
-debug = 0
+lto = true
+codegen-units = 1
 strip = "symbols"
+debug = 0
 debug-assertions = false
 panic = "abort"
-codegen-units = 1
-lto = true
 
 [profile.release-with-logs]
 inherits = "release"
