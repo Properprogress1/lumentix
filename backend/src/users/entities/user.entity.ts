@@ -8,6 +8,7 @@ import {
 } from 'typeorm';
 import { Exclude } from 'class-transformer';
 import { UserRole } from '../enums/user-role.enum';
+import { UserStatus } from '../enums/user-status.enum';
 
 @Entity('users')
 export class User {
@@ -28,6 +29,13 @@ export class User {
     default: UserRole.EVENT_GOER,
   })
   role: UserRole;
+
+  @Column({
+    type: 'enum',
+    enum: UserStatus,
+    default: UserStatus.ACTIVE,
+  })
+  status: UserStatus;
 
   @Column({ nullable: true, type: 'varchar' })
   stellarPublicKey: string | null;
